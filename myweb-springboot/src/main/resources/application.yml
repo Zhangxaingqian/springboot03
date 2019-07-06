@@ -1,0 +1,38 @@
+#服务器的访问端口
+server:
+  port: 6060
+spring:
+  application:
+    name: myweb01
+  redis:
+    host: 120.55.56.15
+  datasource:
+    url: jdbc:mysql://localhost:3306/myweb01
+    username: root
+    password: root
+    hikari:
+      max-lifetime: 28830000 # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';）
+      maximum-pool-size: 9 # 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+  rabbitmq:
+    host: 120.55.56.15
+    virtual-host: /myVirtualHost01
+    username: root
+    password: 123456
+    template:
+      exchange: IExchange
+
+#mapper的xml文件的扫描
+mybatis:
+  #对应实体类路径
+  type-aliases-package: cn.myweb01.money01.pojo
+  #对应mapper映射文件路径,在resources文件夹下面
+  mapper-locations: classpath:mappers/*.xml
+
+#pagehelper物理分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  returnPageInfo: check
+

@@ -1,0 +1,161 @@
+<script src="js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    //页面加载时获取登录的用户数据
+    $(function () {
+        $(".login").hide();//登录信息隐藏
+        //请求servlet，获取登录用户数据
+
+        $.post(
+            "/user/queryInfoByLoginUser",
+            //{action:"getLoginUserData"},//请求方法
+            function (resultInfo) {
+                if(resultInfo.flag){
+                    //已登录
+                    $(".login_out").hide();//没有登录信息隐藏
+                    /*$(".user_a").html(" <span>您好,&nbsp;"+resultInfo.data+"</span>\n" +
+                        "                <a href=\"myfavorite.html\" class=\"collection\">我的收藏</a>\n" +
+                        "                <a href=\"/user/loginOut\">退出</a>").show();*/
+                    $(".user_a").html(" <span>"+resultInfo.data+"</span>\n").show();
+                    //我要招聘
+                    $(".user_perInfo").html(" <a href=\"myJobInfo.html\" class=\"collection\">我要招聘</a>");
+                    //我的收藏
+                    $(".user_lock").html(" <a href=\"myfavorite.html\" class=\"collection\">我的收藏</a>");
+                    //退出
+                    $(".user_key").html(" <a href=\"/user/loginOut\">退出</a>");
+
+                    //已登录的时候,鼠标放到用户名上,弹出下拉框
+                   /* var timer;
+                    $(".user_header a").mouseover(function () {
+                        clearTimeout(timer);
+                        $(".userInfo").show();
+                    });
+                    $(".user_header a").mouseout(function () {
+                        timer = setTimeout(function () {
+                            $(".userInfo").hide();
+                        }, 500);
+                    });
+                    $(".user_ul").mouseover(function () {
+                        clearTimeout(timer);
+                        $(".userInfo").show();
+                    });
+                    $(".user_ul").mouseout(function () {
+                        $(".userInfo").hide();
+                    });*/
+
+                }else{
+                    //未登录
+                    $(".login_out").show();//没有登录信息显示
+                    $(".login").hide();//登录信息隐藏
+                }
+            },
+            "json"
+        );
+    });
+
+</script>
+<!-- 头部 start -->
+    <header id="header">
+        <div class="top_banner">
+            <img src="images/myBackGroud.jpg" alt="">
+        </div>
+        <div class="shortcut">
+            <!-- 未登录状态  -->
+            <div class="login_out">
+                <a href="login.html">登录</a>
+                <a href="register.html">注册</a>
+               <!-- <a href="/">首页</a>-->
+            </div>
+            <!-- 登录状态  -->
+            <div class="user_header">
+                <a class="user_a" style="font-size: 15px" href="javascript:void(0);"><label runat="server" id="user"></label><i class="user_arrow"></i></a>
+                <div class="userInfo">
+                    <ul class="user_ul" >
+                        <li><a href="#"><i class="user_perInfo"></i></a></li>
+                        <li><a href="#"><i class="user_lock"></i></a></li>
+                        <li><a href="#"><i class="user_key"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+          <!--  <div class="login">
+                <span >欢迎回来，admin</span>
+                <a href="myfavorite.html" class="collection">我的收藏</a>
+                <a href="javascript:;">退出</a>
+            </div>-->
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="/" ><img src="images/logo.jpg" alt="" style="cursor: pointer" ></a>
+                </div>
+                <div class="search">
+                    <input name="content" id="content" type="text" placeholder="请输入搜索条件" class="search_input" autocomplete="off">
+                    <a  href="javascript:search();" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <!--<div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>-->
+                    <!--<div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-618-9090</p>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+    <script type="text/javascript" src="js/getParameter.js"></script>
+    <script type="text/javascript">
+        //加载事件
+        /*$(function () {
+            //发出异步请求，获取分类列表数据
+            var url="/category/queryCategoryList";
+            //var data={action:"findAllCategory"};
+            var callback=function (jsonData) {
+                if(jsonData && jsonData.length>0){
+                    //正常获取结果
+                    //拼接导航菜单
+                    var html = "<li class=\"nav-active\"><a href=\"index.html\">首页</a></li>";
+                    //循环分类列表数据，拼接每个导航菜单
+                    for(category of jsonData){
+                        html+="<li><a href=\"route_list.html?cid="+category.cid+"\">"+category.cname+"</a></li>";
+                    }
+                    html+="<li><a href=\"favoriterank.html\">收藏排行榜</a></li>";
+                    //更新到具体位置
+                    $(".navitem .nav").html(html);
+                }else{
+
+                    //发生异常
+                    console.log(jsonData.errorMsg);
+                }
+            };
+            var type="json";
+            $.post(url,callback,type);
+
+
+            //获取url上的rname,更新到搜索输入框里面
+            var rname =decodeURI( getParameter("rname"));
+            if(rname && rname!="null"){
+                //更新页面上
+                $("#content").val(rname);
+            }
+        });*/
+
+        //搜索点击事件
+        function search(){
+            //获取url的cid
+            //var cid = getParameter("cid");
+            //获取搜索框文本值
+            var jname =$("#content").val();
+            location.href="job_list.html?jname="+jname;
+
+        }
+    </script>
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul class="nav">
+
+        </ul>
+    </div>
+    
