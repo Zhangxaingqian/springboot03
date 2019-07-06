@@ -78,12 +78,13 @@ public class ProvinceCityServiceImpl implements IProvinceCityService {
         //使用缓存
         String cityData = (String) redisTemplate.opsForHash().get("area",cityPro.getProvincecode());
         HashMap cityMap=null;
+        List jsonList=null;
         if(null!=cityData){
             try {
                 //cityMap = new ObjectMapper().readValue(cityData, Map.class);
                 cityMap = new ObjectMapper().readValue(cityData, HashMap.class);
                 //jsonData=(String) cityMap.get(cityCode);
-                List jsonList=(List) cityMap.get(cityCode);
+                jsonList=(List) cityMap.get(cityCode);
                 jsonData= new ObjectMapper().writeValueAsString(jsonList);
                 log.info("redis中的缓存area为:{}"+jsonData);
             } catch (IOException e) {
@@ -127,11 +128,12 @@ public class ProvinceCityServiceImpl implements IProvinceCityService {
              cityData = (String) redisTemplate.opsForHash().get("area",cityPro.getProvincecode());
             try {
                 cityMap = new ObjectMapper().readValue(cityData, HashMap.class);
+                jsonList=(List) cityMap.get(cityCode);
+                jsonData= new ObjectMapper().writeValueAsString(jsonList);
             } catch (IOException e) {
                 log.info("字符串转化为map对象异常");
                 e.printStackTrace();
             }
-            jsonData=(String) cityMap.get(cityCode);
         }
 
         return jsonData;
@@ -151,7 +153,8 @@ public class ProvinceCityServiceImpl implements IProvinceCityService {
             try {
                 jsonData = new ObjectMapper().writeValueAsString(list);
             } catch (JsonProcessingException e) {
-                log.info("对象转化为json对象异常"+e);
+                log.info("对象转化为json对象异常");
+                e.printStackTrace();
 
             }
             log.info("将数据存入redis缓存中");

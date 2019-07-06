@@ -8,8 +8,11 @@ import cn.myweb01.money01.pojo.User;
 import cn.myweb01.money01.service.IUserService;
 import cn.myweb01.money01.utils.Md5Util;
 import cn.myweb01.money01.utils.UuidUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional(propagation= Propagation.REQUIRED,isolation= Isolation.DEFAULT)
@@ -31,6 +35,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
 
     @Override
@@ -69,6 +76,11 @@ public class UserServiceImpl implements IUserService {
         map.put("code", user.getCode());
         map.put("userName", user.getUsername());
 
+        JSONObject jsonObject=new JSONObject();
+        String s = new ObjectMapper().writeValueAsString(map);
+
+        sendMessage("myweb.email",s);
+
        /* 这是confirm确认的机制
        rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback(){
             @Override
@@ -77,7 +89,7 @@ public class UserServiceImpl implements IUserService {
             }
         });*/
         //根据key发送到对应的队列
-        rabbitTemplate.convertAndSend("que_email_key", map);
+        //rabbitTemplate.convertAndSend("que_email_key", map);
 
         //发送邮件给注册用户，让其进行账号的激活
         //5f8850ffda66466b95ac75c7f4ad110d
@@ -162,5 +174,16 @@ public class UserServiceImpl implements IUserService {
 
         int count = userMapper.deleteByPrimaryKey(uid);
         return count==1;
+    }
+    /*
+    * 封装的发送rabbitMq消息的方法
+    * */
+    private void sendMessage(String type,String map){
+        // 发送消息
+        try {
+            this.amqpTemplate.convertAndSend(type,map);
+        } catch (Exception e) {
+            log.error("{}邮件消息发送异常", map, e);
+        }
     }
 }

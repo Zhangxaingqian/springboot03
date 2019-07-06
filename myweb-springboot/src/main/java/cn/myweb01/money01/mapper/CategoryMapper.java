@@ -2,7 +2,6 @@ package cn.myweb01.money01.mapper;
 
 import cn.myweb01.money01.pojo.FirstJobCategory;
 import cn.myweb01.money01.pojo.SecondJobCategory;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -27,14 +27,16 @@ public class ProvinceCityController {
         try {
             jsonData=provinceCity.getAllProvince();
         } catch (Exception e) {
-            log.info("省份查询异常"+e);
+            log.info("省份查询异常");
+            e.printStackTrace();
             ResultInfo resultInfo = new ResultInfo(false, null, "服务器忙，请稍后再试！");
             //将resultInfo转换为String
             try {
                 //将java对象转化为json对象
                 jsonData = new ObjectMapper().writeValueAsString(resultInfo);
             } catch (JsonProcessingException e1) {
-                log.info("对象转化为json对象异常"+e1);
+                log.info("对象转化为json对象异常");
+                e1.printStackTrace();
             }
 
         }
@@ -44,6 +46,10 @@ public class ProvinceCityController {
     @RequestMapping("city")
     @ResponseBody
     public String getCityByProvince(String provinceCode) {
+        //未选择省份就直接返回
+        if("请选择省份".equals(provinceCode)){
+            return null;
+        }
         log.info("根据省份获取城市开始,省份的名称:"+provinceCode);
         String jsonData = null;
 
@@ -51,6 +57,7 @@ public class ProvinceCityController {
             jsonData=provinceCity.getCitys(provinceCode);
         } catch (Exception e) {
             log.info("根据省份获取城市异常");
+            e.printStackTrace();
             ResultInfo resultInfo = new ResultInfo(false, null, "服务器忙，请稍后再试！");
             //将resultInfo转换为String
             try {
@@ -66,6 +73,10 @@ public class ProvinceCityController {
     @RequestMapping("area")
     @ResponseBody
     public String getAreaByCity(String cityCode) {
+        //未选择城市就直接返回
+        if("请选择城市".equals(cityCode)){
+            return null;
+        }
         log.info("根据城市获取地区开始,城市的名称:"+cityCode);
         String jsonData = null;
 
@@ -73,6 +84,7 @@ public class ProvinceCityController {
             jsonData=provinceCity.getAreaByCity(cityCode);
         } catch (Exception e) {
             log.info("根据城市获取地区异常");
+            e.printStackTrace();
             ResultInfo resultInfo = new ResultInfo(false, null, "服务器忙，请稍后再试！");
             //将resultInfo转换为String
             try {
