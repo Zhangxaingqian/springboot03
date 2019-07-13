@@ -29,8 +29,7 @@ spring:
     template:
       exchange: IExchange02
     publisher-confirms: true
-  thymeleaf:
-    cache: false  #关闭缓存
+
   data:
     elasticsearch:
       cluster-name: elasticsearch
