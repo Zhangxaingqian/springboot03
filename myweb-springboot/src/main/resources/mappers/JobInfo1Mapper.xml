@@ -132,6 +132,8 @@
             j.province_code,
             j.city_code,
             j.area_code,
+            j.job_update_date,
+            j.job_create_date,
             d.job1_detail
         FROM
             tab_jobinfo1 j

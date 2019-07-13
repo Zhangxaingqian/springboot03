@@ -1,11 +1,63 @@
 package cn.myweb01.money01.service.impl.elasticsearch;
 
+import cn.myweb01.money01.mapper.elasticsearch.JobRepository;
 import cn.myweb01.money01.pojo.PageBean;
+import cn.myweb01.money01.pojo.elasticsearch.JobSearch;
 import cn.myweb01.money01.service.IElasticsearchService;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
+@Service
 public class ElasticsearchServiceImpl implements IElasticsearchService {
+
+
+    @Autowired
+    private JobRepository jobRepository;
+
     @Override
     public PageBean queryJobByPage(Integer curPage, String jname) {
-        return null;
+        //首先判断jname是否为空,为空不查询
+        if(StringUtils.isBlank(jname)){
+            return null;
+        }
+        //定义页面大小，limit x , y中的y的值
+        int pageSize = 5;
+
+
+        // 构建查询条件
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        // 对jname进行全文检索查询
+        queryBuilder.withQuery(QueryBuilders.matchQuery("all", jname).operator(Operator.AND));
+        // 2、通过sourceFilter设置返回的结果字段,我们只需要id、skus、subTitle
+        queryBuilder.withSourceFilter(new FetchSourceFilter(
+                new String[]{"id","jobGrade","jobSite","jobUpdateDate","jobWage"}, null));
+        // 3、分页
+        // 准备分页参数
+        queryBuilder.withPageable(PageRequest.of(curPage - 1, pageSize));
+
+        //4,进行排序,根据时间降序
+        queryBuilder.withSort(SortBuilders.fieldSort("jobUpdateDate").order(SortOrder.DESC));
+        //返回数据
+        Page<JobSearch> search = this.jobRepository.search(queryBuilder.build());
+
+        //封装到pageBean
+        PageBean<JobSearch> pageBean = new PageBean<>();
+        pageBean.setCount((int)search.getTotalElements());//总记录数
+        pageBean.setCurPage(curPage);//当前页的页面
+        pageBean.setPageSize(pageSize);//页面大小
+        pageBean.setData(search.getContent());//当前页的数据
+        return pageBean;
     }
 }

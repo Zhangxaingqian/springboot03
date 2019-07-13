@@ -1,6 +1,5 @@
 package cn.myweb01.money01.controller.elasticsearch;
 
-import cn.myweb01.money01.controller.JobInfo1Controller;
 import cn.myweb01.money01.pojo.PageBean;
 import cn.myweb01.money01.pojo.ResultInfo;
 import cn.myweb01.money01.service.IElasticsearchService;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("es")
@@ -22,6 +22,7 @@ public class EsController {
     /*
     * 搜索工作*/
     @PostMapping("search")
+    @ResponseBody
     public ResultInfo search(@RequestParam(value = "curPage", defaultValue = "1")Integer curPage,
                             @RequestParam(value = "jname", required = false)String jname ) {
         log.info("使用elasticsearch进行搜索开始");

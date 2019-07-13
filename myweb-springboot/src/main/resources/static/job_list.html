@@ -20,7 +20,7 @@
             var jname =decodeURI(getParameter("jname"))=="null"?"":decodeURI(getParameter("jname")) ;
             //异步发送请求获取国内游分页数据
             $.post(
-                "/jobInfo1/queryJobByPage",
+                "/es/search",
                 {curPage:curPage,jname:jname},
                 function (resultInfo) {
                     if(resultInfo.flag){
@@ -32,7 +32,8 @@
                         var html="";
                         for(job of jobList){
                             html+="<tr>\n"+
-                                "<td>"+job.jobGrade+"\n"+
+                                "<td >"+"<a href=\"/job1_detail.html?job1Id="+job.id+"\" style='color: #3683ff'>" +
+                                getJobGrade1(job.jobGrade)+"\n"+
                                 "<td>"+job.jobSite+"\n"+
                                 "<td>"+job.jobWage+"\n"+
                                 "<td>"+JX_data(job.jobUpdateDate)+"\n";
@@ -95,6 +96,31 @@
 
         });
 
+        //设置全局变量
+        var result=9;
+        //后台查询二级类别
+        function getJobGrade1(jobGradeId) {
+            /*
+            * 发送ajax请求,去后台查询*/
+            $.ajaxSettings.async = false;
+            $.get(
+                "/jobCategory/getJobGradeById",//Servlet地址
+                {jobGradeId:jobGradeId},
+                function (resulteInfo){
+                    if(resulteInfo.flag){
+                        var data=resulteInfo.data;
+                        result=data.secondName;
+                    }else{
+                        console.log("服务器繁忙")
+                    }
+
+                },
+                "json"
+            );
+            $.ajaxSettings.async = true;
+            console.log(result);
+            return result;
+        }
     </script>
 </head>
 <body>
@@ -112,7 +138,7 @@
                     <table class="table-zanshi">
                         <thead>
                         <tr>
-                            <th>职位等级
+                            <th >职位等级
                             <th>地点
                             <th>日薪
                             <th>发布时间

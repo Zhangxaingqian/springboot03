@@ -21,17 +21,24 @@ public class JobSearchService {
         JobSearch jobSearch = new JobSearch();
         //根据jobgrade查询对应的中文名称
         Integer jobGrade = jobInfo1.getJobGrade();
-        SecondJobCategory gradeName = categoryService.queryJobGradeById(jobGrade);
+        SecondJobCategory secondJobCategory = categoryService.queryJobGradeById(jobGrade);
         //查询详细要求
         String job1Detail = jobInfo1.getJbob1Detail().getJob1Detail();
 
 
         //对jobsearch进行赋值
+        //主键
         jobSearch.setId(jobInfo1.getJob1Id());
-        jobSearch.setAll(jobGrade+" "+job1Detail);
+        //全文检索的字段
+        jobSearch.setAll(secondJobCategory.getSecondName()+" "+job1Detail);
+        //薪水
         jobSearch.setJobWage(jobInfo1.getJobWage());
+        //职位等级
         jobSearch.setJobGrade(jobInfo1.getJobGrade());
+        //工作地点
         jobSearch.setJobSite(jobInfo1.getJobSite());
+//        更新时间
+        jobSearch.setJobUpdateDate(jobInfo1.getJobUpdateDate());
 
 
         return jobSearch;
