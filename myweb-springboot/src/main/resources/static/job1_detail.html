@@ -65,7 +65,7 @@
     </div>
     <!-- 详情 end -->
 
-    <!--引入头部-->
+    <!--引入尾部-->
     <div id="footer"></div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery-3.3.1.js"></script>
@@ -74,12 +74,15 @@
     <!--导入布局js，共享header和footer-->
     <script type="text/javascript" src="js/include.js"></script>
 <script type="text/javascript" src="js/getParameter.js"></script>
+<script type="text/javascript" src="js/myTool.js"></script>
     <script>
         /*
         发送请求获取详情数据
         * */
         //获取job1Id
         var job1Id = getParameter("job1Id");
+        //设置全局变量
+        var result=9;
         $(function () {
             //发送异步请求,获取工作详细数据
             $.post(
@@ -91,7 +94,10 @@
                         var jobInfo = resultInfo.data;
                         var jobDetail = jobInfo.jbob1Detail;
                         //更新职位名称
-                        $(".job1_detail_title").html(jobInfo.jobGrade);
+                        //由于职位的信息保存的为数字,必须根据这个数字查询出职位
+                        var result=getJobGrade1(jobInfo.jobGrade);
+                        console.log(result);
+                        $(".job1_detail_title").html(result);
                         //更新详细描述
                         $(".job1_detail_techno_yaoqiu p").html(jobDetail.job1Detail);
                         //联系人
@@ -161,7 +167,30 @@
             );
 
         }
+        //后台查询二级类别
 
+        function getJobGrade1(jobGradeId) {
+            /*
+            * 发送ajax请求,去后台查询*/
+            $.ajaxSettings.async = false;
+            $.get(
+                "/jobCategory/getJobGradeById",//Servlet地址
+                {jobGradeId:jobGradeId},
+                function (resulteInfo){
+                    if(resulteInfo.flag){
+                        var data=resulteInfo.data;
+                        result=data.secondName;
+                    }else{
+                        console.log("服务器繁忙")
+                    }
+
+                },
+                "json"
+            );
+            $.ajaxSettings.async = true;
+            console.log(result);
+            return result;
+        }
     </script>
 </body>
 

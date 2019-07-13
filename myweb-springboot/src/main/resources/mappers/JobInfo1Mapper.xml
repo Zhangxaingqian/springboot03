@@ -117,4 +117,5 @@
         </trim>
         where d.job1_id=#{jobInfo1.job1Id}
     </update>
+
 </mapper>

@@ -27,3 +27,28 @@ function JX_data(data) {
 
     return data;
 }
+/*
+* 根据对应的jobGradeId获取jobGrade的描述*/
+/*function getJobGrade(jobGradeId) {
+    /!*
+    * 发送ajax请求,去后台查询*!/
+    console.log(jobGradeId);
+
+    var result;
+    $.get(
+        "/jobCategory/getJobGradeById",//Servlet地址
+        {jobGradeId:jobGradeId},
+        function (resulteInfo){
+            if(resulteInfo.flag){
+                var data=resulteInfo.data;
+                result=data.secondName;
+            }else{
+                console.log("服务器繁忙")
+            }
+
+        },
+        "json"
+    );
+    return result;
+
+}*/

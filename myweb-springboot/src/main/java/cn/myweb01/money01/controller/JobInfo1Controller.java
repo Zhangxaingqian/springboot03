@@ -22,7 +22,6 @@ public class JobInfo1Controller {
     private final static Logger log= LoggerFactory.getLogger(JobInfo1Controller.class);
     @Autowired
     private IJobInfo1Service jobInfo1Service;
-
     /*
      * 分页查询工作表1的信息,并且模糊查询
      * */

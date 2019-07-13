@@ -1,6 +1,7 @@
 package cn.myweb01.money01.controller;
 
 import cn.myweb01.money01.pojo.ResultInfo;
+import cn.myweb01.money01.pojo.SecondJobCategory;
 import cn.myweb01.money01.service.ICategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,6 +72,27 @@ public class JobCategoryController {
         }
         log.info("查询工作二级分类结束:");
         return jsonData;
+
+    }
+
+    /*
+     * 根据二级分类的id获取二级分类的内容*/
+    @RequestMapping("getJobGradeById")
+    @ResponseBody
+    public ResultInfo getJobGradeById(@RequestParam(value = "jobGradeId")Integer jobGradeId){
+        log.info("根据二级分类的id获取二级分类的内容开始,二级分类的id为:"+jobGradeId);
+        ResultInfo resultInfo = null;
+        try {
+            SecondJobCategory secondJobCategory = categoryService.queryJobGradeById(jobGradeId);
+            resultInfo = new ResultInfo(true, secondJobCategory, null);
+        } catch (Exception e) {
+            log.info("根据二级分类的id获取二级分类的内容查询异常"+e);
+            e.printStackTrace();
+            resultInfo = new ResultInfo(false, null, "服务器忙，请稍后再试！");
+
+        }
+        log.info("根据二级分类的id获取二级分类的内容结束:");
+        return resultInfo;
 
     }
 }

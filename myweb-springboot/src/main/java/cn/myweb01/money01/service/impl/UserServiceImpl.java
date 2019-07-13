@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -185,5 +186,11 @@ public class UserServiceImpl implements IUserService {
         } catch (Exception e) {
             log.error("{}邮件消息发送异常", map, e);
         }
+    }
+
+    /*查询所有的用户*/
+    @Override
+    public List<User> queryAllUsers() {
+        return this.userMapper.selectAll();
     }
 }

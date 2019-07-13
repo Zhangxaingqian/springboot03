@@ -89,4 +89,9 @@ public class CategoryServiceImpl implements ICategoryService {
 
         return jsonData;
     }
+    //根据二级分类的id查询二级分类的名字
+    @Override
+    public SecondJobCategory queryJobGradeById(Integer jobGradeId) {
+        return this.categoryMapper.queryJobGradeById(jobGradeId);
+    }
 }

@@ -4,6 +4,7 @@ import cn.myweb01.money01.mapper.JobInfo1Mapper;
 import cn.myweb01.money01.pojo.Jbob1Detail;
 import cn.myweb01.money01.pojo.JobInfo1;
 import cn.myweb01.money01.pojo.PageBean;
+import cn.myweb01.money01.pojo.SecondJobCategory;
 import cn.myweb01.money01.service.IJobInfo1Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,4 +123,6 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
         JobInfo1 jobInfo1=jobInfo1Mapper.selectDetailJobInfo1ById(jobId);
         return jobInfo1;
     }
+
+
 }

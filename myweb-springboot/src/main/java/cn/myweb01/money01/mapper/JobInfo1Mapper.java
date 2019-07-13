@@ -2,6 +2,7 @@ package cn.myweb01.money01.mapper;
 
 import cn.myweb01.money01.pojo.Jbob1Detail;
 import cn.myweb01.money01.pojo.JobInfo1;
+import cn.myweb01.money01.pojo.SecondJobCategory;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -29,5 +30,6 @@ public interface JobInfo1Mapper {
     void updateJobInfo(JobInfo1 jobInfo1);
     //更新工作详情表的信息
     void updateJobInfoDetail(@Param("jobInfo1") JobInfo1 jobInfo1, @Param("job1Detail") Jbob1Detail job1Detail);
+
 
 }
