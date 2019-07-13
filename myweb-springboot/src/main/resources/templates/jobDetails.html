@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>招聘详情</title>
+    <!--不加下面的,格式应该是th:src="@{/}"-->
+    <base th:href="@{/}">
+    <base th:src="@{/}">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/job1-detail.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/myTool.js"></script>
+</head>
+<body>
+<!--引入头部-->
+<header id="header">
+    <div class="top_banner">
+        <img src="images/myBackGroud.jpg" alt="">
+    </div>
+    <div class="shortcut">
+        <!-- 未登录状态  -->
+        <div class="login_out">
+            <a href="login.html">登录</a>
+            <a href="register.html">注册</a>
+            <!-- <a href="/">首页</a>-->
+        </div>
+        <!-- 登录状态  -->
+        <div class="user_header">
+            <a class="user_a" style="font-size: 15px" href="javascript:void(0);"><label runat="server" id="user"></label><i class="user_arrow"></i></a>
+            <div class="userInfo">
+                <ul class="user_ul" >
+                    <li><a href="#"><i class="user_perInfo"></i></a></li>
+                    <li><a href="#"><i class="user_lock"></i></a></li>
+                    <li><a href="#"><i class="user_key"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="header_wrap">
+        <div class="topbar">
+            <div class="logo">
+                <a href="/" ><img src="images/logo.jpg" alt="" style="cursor: pointer" ></a>
+            </div>
+            <div class="search">
+                <input name="content" id="content" type="text" placeholder="请输入搜索条件" class="search_input" autocomplete="off">
+                <a  href="javascript:search();" class="search-button">搜索</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+<div class="wrap">
+    <div class="bread_box">
+        <!--<a href="/">首页</a>-->
+        <!--<span> &gt;</span>-->
+        <!--<a href="#">国内游</a><span> &gt;</span>
+        <a href="#">全国-曼谷6-7天自由行 泰国出境旅游 特价往返机票自由行二次确认</a>-->
+    </div>
+    <div class="prosum_box">
+        <div class="prosum_left">
+            <div class="job1_detail_title" th:text="${jobInfo1.jobGrade}" >中级程序员</div>
+            <div class="job1_detail_techno" >技术要求:</div>
+            <div class="job1_detail_techno_yaoqiu">
+                <p style=" text-indent: 2em" th:text="${jobInfo1.jbob1Detail.job1Detail}">
+                    工作三年以上,必须在职,且提供现单位工作证明,
+                    且无犯罪证明
+                </p>
+            </div>
+            <div class="contectMethod">
+                <dl>
+                    <dt>联系人:</dt>
+                    <dd class="contactPerson" th:text="${jobInfo1.firstName}" >张先生</dd>
+                </dl><br>
+                <dl>
+                    <dt>联系电话:</dt>
+                    <dd class="contacPhone" th:text="${jobInfo1.phoneNum}">13248134961</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="prosum_right">
+            <div class="join_us">欢迎加入我们,扫描下方的二维码</div>
+            <img src="images/myWeiXin.jpg" class="imgewm" />
+            <div></div>
+        </div>
+        <!--收藏按钮-->
+        <p class="collect" style="text-align: center">
+            <a onclick="addFavorite();"  class="btn already" disabled="disabled"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
+            <!--<span>已收藏100次</span>-->
+        </p>
+    </div>
+    <div class="you_need_konw">
+        <span>应聘须知</span>
+        <div class="notice">
+            <p>1、禁止任何非法欺骗 <br>
+            <p>2、请自行判断客户信用 <br>
+            <p>3、本网站仅仅提供平台,为非盈利网站 <br>
+
+
+        </div>
+    </div>
+</div>
+<!--引入尾部-->
+<footer id="footer">
+    <div class="why_select">
+    </div>
+    <div class="company">
+        <p>未经同意,不得转载</p>
+    </div>
+</footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //var type = /*[[${type}]]*/;
+    //设置全局变量
+    var result=9;
+    var jobGrade=[[${jobInfo1.jobGrade}]];
+    var jobGradeName=getJobGrade1(jobGrade);
+    console.log(jobGradeName);
+    //后台查询二级类别
+
+    function getJobGrade1(jobGradeId) {
+        /*
+        * 发送ajax请求,去后台查询*/
+        $.ajaxSettings.async = false;
+        $.get(
+            "/jobCategory/getJobGradeById",//Servlet地址
+            {jobGradeId:jobGradeId},
+            function (resulteInfo){
+                if(resulteInfo.flag){
+                    var data=resulteInfo.data;
+                    result=data.secondName;
+                }else{
+                    console.log("服务器繁忙")
+                }
+
+            },
+            "json"
+        );
+        $.ajaxSettings.async = true;
+        console.log(result);
+        return result;
+    }
+
+</script>
+
+
+
+
+</body>
+
+
+</html>

@@ -38,3 +38,18 @@ spring:
 
 3   eclispe中如果出现configuration reference non-existing project
 需要右键项目,configure 转化为maven项目
+
+4  idea第一次提交代码到github  https://www.cnblogs.com/asunwei/p/9533424.html
+
+5  rabbitmq如果虚拟用户为myVirtualHost01 在yml文件中不能加/ 仅仅就是myVirtualHost01
+
+6  在JAVA中，一切皆对象，而将对象的状态信息转为存储或传输的形式需要序列化,比如将java对象存储在
+redis中就需要
+7  windows进入redsi数据库的命令,在启动目录中redis-cli.exe -h 127.0.0.1 -p 6379
+keys * 获取所有的键
+
+8  当用变量去接收ajax的回调函数的值的时候一定要注意:
+必须使用全局变量,必须是同步的ajax,因为异步的ajax不确定什么时候会得到值
+
+
+9  linux中启动elasticsearch-head的命令 grunt server
