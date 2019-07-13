@@ -1,9 +1,11 @@
 package cn.myweb01.money01.service.impl.elasticsearch;
 
 import cn.myweb01.money01.mapper.elasticsearch.JobRepository;
+import cn.myweb01.money01.pojo.JobInfo1;
 import cn.myweb01.money01.pojo.PageBean;
 import cn.myweb01.money01.pojo.elasticsearch.JobSearch;
 import cn.myweb01.money01.service.IElasticsearchService;
+import cn.myweb01.money01.service.IJobInfo1Service;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -16,6 +18,7 @@ import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +28,11 @@ public class ElasticsearchServiceImpl implements IElasticsearchService {
 
     @Autowired
     private JobRepository jobRepository;
+    @Autowired
+    private IJobInfo1Service jobInfo1Service;
+    @Autowired
+    private JobSearchService jobSearchService;
+
 
     @Override
     public PageBean queryJobByPage(Integer curPage, String jname) {
@@ -59,5 +67,21 @@ public class ElasticsearchServiceImpl implements IElasticsearchService {
         pageBean.setPageSize(pageSize);//页面大小
         pageBean.setData(search.getContent());//当前页的数据
         return pageBean;
+    }
+
+    //更新文档
+    public void createIndex(Integer id) throws IOException {
+        //根据id查询工作表
+        JobInfo1 jobInfo1 = this.jobInfo1Service.selectDetailJobInfo1ById(id);
+        //将jobinfo1对象转化为jobsearch对象
+        JobSearch jobSearch = this.jobSearchService.createJobSearch(jobInfo1);
+        //保存为文档
+        this.jobRepository.save(jobSearch);
+
+    }
+
+    //删除文档
+    public void deleteIndex(Integer id) {
+       this.jobRepository.deleteById((long)id);
     }
 }

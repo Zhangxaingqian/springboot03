@@ -6,8 +6,13 @@ import cn.myweb01.money01.pojo.JobInfo1;
 import cn.myweb01.money01.pojo.PageBean;
 import cn.myweb01.money01.pojo.SecondJobCategory;
 import cn.myweb01.money01.service.IJobInfo1Service;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +31,8 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
 
     @Autowired
     private JobInfo1Mapper jobInfo1Mapper;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     /*分页查询工作列表,并且模糊查询*/
     @Override
@@ -104,12 +112,16 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
 
             log.info("更新工作表详情表的数据");
             jobInfo1Mapper.updateJobInfoDetail(jobInfo1,jbob1Detail);
+            //给es发送消息
+            sendMessage(jobId, "update");
         }else{
             jobInfo1.setJobCreateDate(new Timestamp(System.currentTimeMillis()));
             log.info("保存工作表的数据");
             jobInfo1Mapper.saveJobInfo(jobInfo1);
             log.info("保存工作表详情表的数据");
             jobInfo1Mapper.saveJobInfoDetail(jobInfo1,jbob1Detail);
+            //给es发送消息
+            sendMessage(jobInfo1.getJob1Id(), "insert");
         }
 
     }
@@ -122,6 +134,20 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
         //根据id查出工作信息
         JobInfo1 jobInfo1=jobInfo1Mapper.selectDetailJobInfo1ById(jobId);
         return jobInfo1;
+    }
+
+    /*当工作表发生更新获取添加的时候,发送消息给es服务,进行对应的更改*/
+    private void sendMessage(Integer id, String type){
+        // 发送消息
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("id", id.toString());
+        JSONObject jsonObject=new JSONObject();
+        try {
+            String s = new ObjectMapper().writeValueAsString(map);
+            this.amqpTemplate.convertAndSend("job." + type, s);
+        } catch (Exception e) {
+            log.error("{}更改工作消息发送异常，工作id：{}", type, id, e);
+        }
     }
 
 

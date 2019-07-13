@@ -35,7 +35,7 @@ public class SendEmailListener {
             ),
             key = {"myweb.email"}))
     public void emailListen(Message message, Channel channel){{
-        log.info("rabbitMq接受者");
+        log.info("发送邮件监听到消息");
         try {
             //msg就是rabbitmq传来的消息
             // 使用jackson解析

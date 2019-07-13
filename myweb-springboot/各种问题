@@ -53,3 +53,6 @@ keys * 获取所有的键
 
 
 9  linux中启动elasticsearch-head的命令 grunt server
+
+10  JsonParseException: Unexpected character ('¬' (code 172)): expected a valid value (n
+这是向mq传递消息的时候没有将对象转化为json对象
