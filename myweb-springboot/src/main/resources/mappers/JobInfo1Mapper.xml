@@ -48,10 +48,10 @@
     <!--查询招聘工作详细信息,关联工作详情表-->
     <!--返回两表联查结果的map-->
     <resultMap id="job1AndDetail" type="JobInfo1" autoMapping="true">
-        <id column="job1Id" property="job1Id"></id>
+        <id column="job1_id" property="job1Id"></id>
 
         <association property="jbob1Detail" javaType="Jbob1Detail" autoMapping="true">
-            <id column="dJob1Id" property="dJob1Id"></id>
+            <id column="d_job1_id" property="dJob1Id"></id>
         </association>
 
     </resultMap>
@@ -118,4 +118,23 @@
         where d.job1_id=#{jobInfo1.job1Id}
     </update>
 
+    <!--查询两表联查-->
+    <select id="selectAll" resultMap="job1AndDetail">
+        SELECT
+            j.job1_id,
+            j.job_category,
+            j.job_grade,
+            j.job_site,
+            j.job_wage,
+            j.sex,
+            j.first_name,
+            j.phone_num,
+            j.province_code,
+            j.city_code,
+            j.area_code,
+            d.job1_detail
+        FROM
+            tab_jobinfo1 j
+        INNER JOIN tab_job1_detail d ON j.job1_Id = d.job1_Id
+    </select>
 </mapper>

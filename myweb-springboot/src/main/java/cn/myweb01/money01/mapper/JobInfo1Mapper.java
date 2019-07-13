@@ -31,5 +31,7 @@ public interface JobInfo1Mapper {
     //更新工作详情表的信息
     void updateJobInfoDetail(@Param("jobInfo1") JobInfo1 jobInfo1, @Param("job1Detail") Jbob1Detail job1Detail);
 
+    //查询工作表一和详情表的所有信息,返回jobInfo对象
+    List<JobInfo1> selectAll();
 
 }

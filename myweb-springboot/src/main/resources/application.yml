@@ -31,6 +31,10 @@ spring:
     publisher-confirms: true
   thymeleaf:
     cache: false  #关闭缓存
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 120.55.56.15:9300
 
 #mapper的xml文件的扫描
 mybatis:
