@@ -4,6 +4,7 @@ import cn.myweb01.money01.mapper.elasticsearch.JobRepository;
 import cn.myweb01.money01.pojo.JobInfo1;
 import cn.myweb01.money01.pojo.PageBean;
 import cn.myweb01.money01.pojo.elasticsearch.JobSearch;
+import cn.myweb01.money01.pojo.elasticsearch.SearchRequest;
 import cn.myweb01.money01.service.IElasticsearchService;
 import cn.myweb01.money01.service.IJobInfo1Service;
 import org.apache.commons.lang3.StringUtils;
@@ -35,15 +36,17 @@ public class ElasticsearchServiceImpl implements IElasticsearchService {
 
 
     @Override
-    public PageBean queryJobByPage(Integer curPage, String jname) {
+    public PageBean queryJobByPage(SearchRequest request) {
+        //从对象获取参数
+        String jname=request.getKey();
+        Integer curPage=request.getCurPage();
+        Integer pageSize=request.getPageSize();
+        String minPrice=request.getMinPrice();
+        String maxPrice=request.getMaxPrice();
         //首先判断jname是否为空,为空不查询
         if(StringUtils.isBlank(jname)){
             return null;
         }
-        //定义页面大小，limit x , y中的y的值
-        int pageSize = 5;
-
-
         // 构建查询条件
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 对jname进行全文检索查询
@@ -54,7 +57,30 @@ public class ElasticsearchServiceImpl implements IElasticsearchService {
         // 3、分页
         // 准备分页参数
         queryBuilder.withPageable(PageRequest.of(curPage - 1, pageSize));
-
+        //范围内查询
+        if(null!=minPrice && null!=maxPrice){
+            queryBuilder.withFilter(QueryBuilders.
+                    rangeQuery("jobWage")
+                    .from(minPrice)
+                    .to(maxPrice)
+                    .includeLower(true)     // 包含上界
+                    .includeUpper(true)      // 包含下届
+            );
+        }else if(null==minPrice && null!=maxPrice){
+            queryBuilder.withFilter(QueryBuilders.
+                    rangeQuery("jobWage")
+                    .from("0")
+                    .to(maxPrice)
+                    .includeLower(true)     // 包含上界
+                    .includeUpper(true)      // 包含下届
+            );
+        }else if(null!=minPrice && null==maxPrice){
+            queryBuilder.withFilter(QueryBuilders.
+                    rangeQuery("jobWage")
+                    .from(minPrice)
+                    .includeLower(true)     // 包含上界
+            );
+        }
         //4,进行排序,根据时间降序
         queryBuilder.withSort(SortBuilders.fieldSort("jobUpdateDate").order(SortOrder.DESC));
         //返回数据

@@ -56,3 +56,15 @@ keys * 获取所有的键
 
 10  JsonParseException: Unexpected character ('¬' (code 172)): expected a valid value (n
 这是向mq传递消息的时候没有将对象转化为json对象
+
+11 将搜索的内容保存到sessionStorage中,当页面跳转的时候进行反显
+sessionStorage是临时的,随着浏览器关闭而消亡,而localStorage是永久的,保存在硬盘中
+
+12  es中的queryBuilder的使用参照https://blog.csdn.net/xiaozm1223/article/details/89210295
+
+13  正整数^((0{1}\.\d{1,2})|([1-9]\d*\.{1}\d{1,2})|([1-9]+\d*))$
+正数^((0{1}\.\d{1,2})|([1-9]\d*\.{1}\d{1,2})|([1-9]+\d*)|0)$ 两位小数
+
+14  $.post是$.ajax的简写形式,当mvc的后端的接收使用@requestBody时,前台的参数必须是
+json格式,在后台才可以映射对应的java类,而$.post无法指定contentType:jsoN, 所以只能使用
+$.ajax,指定类型,并且使用Json.stringfy将对象转化为json字符串

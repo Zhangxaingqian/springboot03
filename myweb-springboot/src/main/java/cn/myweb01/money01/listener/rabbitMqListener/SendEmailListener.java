@@ -27,7 +27,7 @@ public class SendEmailListener {
     private SendEmail sendEmail;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "spring.test.queue", durable = "true"),
+            value = @Queue(value = "spring.email.queue", durable = "true"),
             exchange = @Exchange(
                     value = "IExchange02",
                     ignoreDeclarationExceptions = "true",

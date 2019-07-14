@@ -30,7 +30,7 @@ public class EsListener {
     private IElasticsearchService elasticsearchService;
     //监听创建和更新
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "spring.test.queue", durable = "true"),
+            value = @Queue(value = "spring.update.queue", durable = "true"),
             exchange = @Exchange(
                     value = "IExchange02",
                     ignoreDeclarationExceptions = "true",
@@ -52,7 +52,7 @@ public class EsListener {
     }
     //监听删除
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "spring.test.queue", durable = "true"),
+            value = @Queue(value = "spring.delete.queue", durable = "true"),
             exchange = @Exchange(
                     value = "IExchange02",
                     ignoreDeclarationExceptions = "true",
