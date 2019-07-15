@@ -80,7 +80,9 @@
     <!--保存工作表的信息-->
     <insert id="saveJobInfo" useGeneratedKeys="true" keyProperty="job1Id" keyColumn="job1_id">
         insert into tab_jobinfo1
-        values(null,#{userName},#{jobCategory},#{jobGrade},#{jobSite},#{jobCreateDate},#{jobWage},#{firstName},#{phoneNum},#{sex},#{jobCreateDate});
+        values(null,#{userName},#{jobCategory},#{jobGrade},#{jobSite},
+        #{jobCreateDate},#{jobWage},#{firstName},#{phoneNum},#{sex},
+        #{jobCreateDate},#{provinceCode},#{cityCode},#{areaCode});
     </insert>
     <!--保存工作详情的信息-->
     <insert id="saveJobInfoDetail">
@@ -98,6 +100,7 @@
         <trim prefix="set" suffixOverrides=",">
         <if test="jobCategory!=null">j.job_category=#{jobCategory},</if>
             <if test="jobGrade!=null">j.job_grade=#{jobGrade},</if>
+            <if test="jobSite!=null">j.job_site=#{jobSite},</if>
             <if test="provinceCode!=null">j.province_code=#{provinceCode},</if>
             <if test="cityCode!=null">j.city_code=#{cityCode},</if>
             <if test="areaCode!=null">j.area_code=#{areaCode},</if>

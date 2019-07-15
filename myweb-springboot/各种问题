@@ -68,3 +68,17 @@ sessionStorage是临时的,随着浏览器关闭而消亡,而localStorage是永�
 14  $.post是$.ajax的简写形式,当mvc的后端的接收使用@requestBody时,前台的参数必须是
 json格式,在后台才可以映射对应的java类,而$.post无法指定contentType:jsoN, 所以只能使用
 $.ajax,指定类型,并且使用Json.stringfy将对象转化为json字符串
+
+
+15  resultType：查询的结果在pojo中有对应的字段,一般是单表
+resultMap: 需要手动设置对应的字段关系,一把用在一对多查询
+
+16  java -jar -Dlogging.path=e:\mylog 后面跟上jar包就可以启动
+
+nohup java -jar myweb-springboot-1.0-SNAPSHOT.jar > ../logs/spring.log &
+
+以上是后台启动,并指定日志的命令
+
+17  linux中 shift+g 跳到最后
+
+18 netstat -ano|findstr "8080" 查看8080进程   taskkill /pid  跟上pid杀死进程

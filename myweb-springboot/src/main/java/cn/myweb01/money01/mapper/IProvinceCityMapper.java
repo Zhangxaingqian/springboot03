@@ -17,4 +17,7 @@ public interface IProvinceCityMapper {
     List<Province> getAllProvince();
     //通过城市找到对应的省份
     City getProvinceByCityCode(@Param("cityCode") String cityCode);
+
+    //根据地区的代码获取地区的名称
+    Area getAreaNameByCode(@Param("areaCode")String areaCode);
 }

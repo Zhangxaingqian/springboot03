@@ -164,4 +164,9 @@ public class ProvinceCityServiceImpl implements IProvinceCityService {
 
         return jsonData;
     }
+
+    @Override
+    public String getAreaNameByCode(String areaCode) {
+        return this.provinceCityMapper.getAreaNameByCode(areaCode).getName();
+    }
 }

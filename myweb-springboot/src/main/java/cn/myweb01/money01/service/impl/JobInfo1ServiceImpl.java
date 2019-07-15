@@ -6,6 +6,7 @@ import cn.myweb01.money01.pojo.JobInfo1;
 import cn.myweb01.money01.pojo.PageBean;
 import cn.myweb01.money01.pojo.SecondJobCategory;
 import cn.myweb01.money01.service.IJobInfo1Service;
+import cn.myweb01.money01.service.IProvinceCityService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
@@ -33,6 +34,8 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
     private JobInfo1Mapper jobInfo1Mapper;
     @Autowired
     private AmqpTemplate amqpTemplate;
+    @Autowired
+    private IProvinceCityService provinceCityService;
 
     /*分页查询工作列表,并且模糊查询*/
     @Override
@@ -85,6 +88,8 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
         String areaCode=(String)zhaoPinInfo.get("area");
         Integer jobWage=null!=(String)zhaoPinInfo.get("jobWage")?Integer.parseInt((String)zhaoPinInfo.get("jobWage")):null;
 
+        //获取地区名称,赋值给jobsite
+        String areaName = this.provinceCityService.getAreaNameByCode(areaCode);
         //封装jobInfo1对象
         JobInfo1 jobInfo1 = new JobInfo1();
         jobInfo1.setUserName(userName);
@@ -97,6 +102,7 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
         jobInfo1.setProvinceCode(provinceCode);
         jobInfo1.setCityCode(cityCode);
         jobInfo1.setJobWage(jobWage);
+        jobInfo1.setJobSite(areaName);
         //封装jobDetail对象
         Jbob1Detail jbob1Detail = new Jbob1Detail();
         jbob1Detail.setJob1Detail(job1Detail);
@@ -132,8 +138,14 @@ public class JobInfo1ServiceImpl implements IJobInfo1Service {
         //根据用户名查出对应的工作id,再根据id查出详情
         Integer jobId=jobInfo1Mapper.queryJobIdByUserName(userName);
         //根据id查出工作信息
-        JobInfo1 jobInfo1=jobInfo1Mapper.selectDetailJobInfo1ById(jobId);
-        return jobInfo1;
+        if(null==jobId){
+            log.info("用户还没有工作招聘信息");
+            return null;
+        }else{
+            JobInfo1 jobInfo1=jobInfo1Mapper.selectDetailJobInfo1ById(jobId);
+            return jobInfo1;
+        }
+
     }
 
     /*当工作表发生更新获取添加的时候,发送消息给es服务,进行对应的更改*/

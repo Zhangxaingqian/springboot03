@@ -1,6 +1,8 @@
 package cn.myweb01.money01.pojo.ProvinceCity;
 
-public class Province {
+import java.io.Serializable;
+
+public class Province implements Serializable {
     private String code;
     private String name;
 

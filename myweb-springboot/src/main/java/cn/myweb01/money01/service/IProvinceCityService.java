@@ -7,4 +7,6 @@ public interface IProvinceCityService {
    String getAreaByCity(String cityCode);
     //获取所有的省份
     String getAllProvince();
+    //根据地区代码获取地区名称
+    String getAreaNameByCode(String areaCode);
 }
