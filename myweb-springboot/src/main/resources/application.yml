@@ -1,6 +1,6 @@
 #服务器的访问端口
 server:
-  port: 8090
+  port: 6060
 spring:
   application:
     name: myweb01
