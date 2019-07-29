@@ -83,3 +83,6 @@ nohup java -jar myweb-springboot-1.0-SNAPSHOT.jar > ../logs/spring.log &
 17  linux中 shift+g 跳到最后
 
 18 netstat -ano|findstr "8080" 查看8080进程   taskkill /pid  跟上pid杀死进程
+
+19  在阿里云的ecs上面部署apollo的时候，在start.sh的文件中需要在 java_opt的选项中加入 -Deureka.instance.ip-address=120.55.56.15
+这样rureka中的ipAdress才是自己的实例的ip
